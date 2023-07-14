@@ -59,6 +59,9 @@ code_template = '''
   }
 '''
 
+def escape_double_quote(line: str):
+    return line.replace('"','\"')
+
 def create_ipynb(answer_file:Path ,index_file: Path):
     with index_file.open("r") as f:
         lines = f.readlines()
@@ -74,11 +77,11 @@ def create_ipynb(answer_file:Path ,index_file: Path):
                     af.write(f"{cell_postfix_template},")
                     af.write(f"{code_template},")
                     af.write(cell_prefix_template)
-                    af.write(f"\"{''.join(line.splitlines())}\\n\"\n")
+                    af.write(f"\"{''.join(escape_double_quote(line).splitlines())}\\n\"\n")
                 else:
                     if not line.startswith("# "):
                         af.write(",\n")
-                    af.write(f"\"{''.join(line.splitlines())}\\n\"")
+                    af.write(f"\"{''.join(escape_double_quote(line).splitlines())}\\n\"")
             
             af.write(f"{cell_postfix_template},")
             af.write(cell_prefix_template)
